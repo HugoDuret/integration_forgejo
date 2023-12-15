@@ -1,15 +1,15 @@
 OC.L10N.register(
-    "integration_gitlab",
+    "integration_forgejo",
     {
     "Error during OAuth exchanges" : "Помилка під час обміну OAuth",
-    "GitLab To-Dos" : "Завдання на GitLab",
+    "Forgejo To-Dos" : "Завдання на Forgejo",
     "Bad HTTP method" : "Поганий метод HTTP",
     "Bad credentials" : "Погані облікові дані",
     "OAuth access token refused" : "Маркер доступу OAuth відхилено",
     "Connected accounts" : "Підключені облікові записи",
     "Mark as done" : "Позначити як виконане",
     "You were mentioned" : "Про вас згадували",
-    "Failed to edit GitLab To-Do" : "Не вдалося редагувати завдання на GitLab",
+    "Failed to edit Forgejo To-Do" : "Не вдалося редагувати завдання на Forgejo",
     "Unknown error" : "Невідома помилка",
     "Comments" : "Коментарі",
     "Author" : "Автор",

@@ -2,9 +2,9 @@
 host     = https://www.transifex.com
 lang_map = cs_CZ: cs, fi_FI: fi, hu_HU: hu, nb_NO: nb, sk_SK: sk, th_TH: th, ja_JP: ja, bg_BG: bg
 
-[o:nextcloud:p:nextcloud:r:integration_gitlab]
-file_filter = translationfiles/<lang>/integration_gitlab.po
-source_file = translationfiles/templates/integration_gitlab.pot
+[o:nextcloud:p:nextcloud:r:integration_forgejo]
+file_filter = translationfiles/<lang>/integration_forgejo.po
+source_file = translationfiles/templates/integration_forgejo.pot
 source_lang = en
 type        = PO
 

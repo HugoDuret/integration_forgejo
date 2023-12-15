@@ -1,6 +1,6 @@
 import { loadState } from '@nextcloud/initial-state'
 
-const state = loadState('integration_gitlab', 'popup-data')
+const state = loadState('integration_forgejo', 'popup-data')
 const userName = state.user_name
 const userDisplayName = state.user_displayname
 

@@ -1,6 +1,6 @@
 <?php
-$appId = OCA\Gitlab\AppInfo\Application::APP_ID;
+$appId = OCA\Forgejo\AppInfo\Application::APP_ID;
 \OCP\Util::addScript($appId, $appId . '-popupSuccess');
 ?>
 
-<div id="gitlab_prefs"></div>
+<div id="forgejo_prefs"></div>

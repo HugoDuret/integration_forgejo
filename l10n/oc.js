@@ -1,5 +1,5 @@
 OC.L10N.register(
-    "integration_gitlab",
+    "integration_forgejo",
     {
     "Bad credentials" : "Marrits identificants",
     "Connected accounts" : "Comptes connectats",

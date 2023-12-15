@@ -1,5 +1,5 @@
 OC.L10N.register(
-    "integration_gitlab",
+    "integration_forgejo",
     {
     "Error getting OAuth access token. " : "Feil ved henting av OAuth-tilgangstoken. ",
     "Error during OAuth exchanges" : "Feil ved utveksling av OAuth",

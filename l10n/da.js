@@ -1,5 +1,5 @@
 OC.L10N.register(
-    "integration_gitlab",
+    "integration_forgejo",
     {
     "Connected accounts" : "Forbundne konti",
     "Connected as {user}" : "Forbundet som {user}",

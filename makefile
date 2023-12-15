@@ -1,4 +1,4 @@
-app_name=integration_gitlab
+app_name=integration_forgejo
 app_version=$(version)
 project_dir=.
 build_dir=/tmp/build
@@ -84,7 +84,7 @@ appstore: clean
 	--exclude=stylelint.config.js \
 	--exclude=.eslintrc.js \
 	--exclude=.github \
-	--exclude=.gitlab-ci.yml \
+	--exclude=.forgejo-ci.yml \
 	--exclude=crowdin.yml \
 	--exclude=tools \
 	--exclude=.tx \

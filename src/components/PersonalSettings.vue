@@ -1,97 +1,126 @@
 <template>
-	<div id="gitlab_prefs" class="section">
-		<h2>
-			<GitlabIcon class="icon" />
-			{{ t('integration_gitlab', 'GitLab integration') }}
-		</h2>
-		<p v-if="!showOAuth && !connected" class="settings-hint">
-			{{ t('integration_gitlab', 'When you create an access token yourself, give it at least "read_user", "read_api" and "read_repository" permissions. Optionally "api" instead.') }}
-		</p>
-		<div id="gitlab-content">
-			<div class="line">
-				<label for="gitlab-url">
-					<EarthIcon :size="20" class="icon" />
-					{{ t('integration_gitlab', 'GitLab instance address') }}
-				</label>
-				<input id="gitlab-url"
-					v-model="state.url"
-					type="text"
-					:disabled="connected === true"
-					:placeholder="t('integration_gitlab', 'GitLab instance address')"
-					@input="onInput">
-			</div>
-			<div v-show="!showOAuth" class="line">
-				<label
-					for="gitlab-token">
-					<KeyIcon :size="20" class="icon" />
-					{{ t('integration_gitlab', 'Personal access token') }}
-				</label>
-				<input
-					id="gitlab-token"
-					v-model="state.token"
-					type="password"
-					:disabled="connected === true"
-					:placeholder="t('integration_gitlab', 'GitLab personal access token')"
-					@keyup.enter="onConnectClick">
-			</div>
-			<NcButton v-if="!connected"
-				id="gitlab-oauth"
-				:disabled="loading === true || (!showOAuth && !state.token)"
-				:class="{ loading }"
-				@click="onConnectClick">
-				<template #icon>
-					<OpenInNewIcon :size="20" />
-				</template>
-				{{ t('integration_gitlab', 'Connect to GitLab') }}
-			</NcButton>
-			<div v-if="connected" class="line">
-				<label class="gitlab-connected">
-					<CheckIcon :size="20" class="icon" />
-					{{ t('integration_gitlab', 'Connected as {user}', { user: connectedAs }) }}
-				</label>
-				<NcButton @click="onLogoutClick">
-					<template #icon>
-						<CloseIcon :size="20" />
-					</template>
-					{{ t('integration_gitlab', 'Disconnect from GitLab') }}
-				</NcButton>
-				<span />
-			</div>
-			<br>
-			<div v-if="connected" id="gitlab-search-block">
-				<NcCheckboxRadioSwitch
-					:checked="state.search_enabled"
-					@update:checked="onCheckboxChanged($event, 'search_enabled')">
-					{{ t('integration_gitlab', 'Enable searching for repositories') }}
-				</NcCheckboxRadioSwitch>
-				<NcCheckboxRadioSwitch
-					:checked="state.search_issues_enabled"
-					@update:checked="onCheckboxChanged($event, 'search_issues_enabled')">
-					{{ t('integration_gitlab', 'Enable searching for issues') }}
-				</NcCheckboxRadioSwitch>
-				<NcCheckboxRadioSwitch
-					:checked="state.search_mrs_enabled"
-					@update:checked="onCheckboxChanged($event, 'search_mrs_enabled')">
-					{{ t('integration_gitlab', 'Enable searching for merge requests') }}
-				</NcCheckboxRadioSwitch>
-				<br>
-				<p v-if="state.search_enabled || state.search_issues_enabled" class="settings-hint">
-					<InformationOutlineIcon :size="20" class="icon" />
-					{{ t('integration_gitlab', 'Warning, everything you type in the search bar will be sent to GitLab.') }}
-				</p>
-			</div>
-			<NcCheckboxRadioSwitch
-				:checked="state.navigation_enabled"
-				@update:checked="onCheckboxChanged($event, 'navigation_enabled')">
-				{{ t('integration_gitlab', 'Enable navigation link') }}
-			</NcCheckboxRadioSwitch>
-			<NcCheckboxRadioSwitch
-				:checked="state.link_preview_enabled"
-				@update:checked="onCheckboxChanged($event, 'link_preview_enabled')">
-				{{ t('integration_gitlab', 'Enable GitLab link previews') }}
-			</NcCheckboxRadioSwitch>
-		</div>
-	</div>
+  <div id="forgejo_prefs"
+       class="section"
+  >
+    <h2>
+      <ForgejoIcon class="icon" />
+      {{ t('integration_forgejo', 'Forgejo integration') }}
+    </h2>
+    <p v-if="!showOAuth && !connected"
+       class="settings-hint"
+    >
+      {{ t('integration_forgejo', 'When you create an access token yourself, give it at least "read_user", "read_api" and "read_repository" permissions. Optionally "api" instead.') }}
+    </p>
+    <div id="forgejo-content">
+      <div class="line">
+        <label for="forgejo-url">
+          <EarthIcon :size="20"
+                     class="icon"
+          />
+          {{ t('integration_forgejo', 'Forgejo instance address') }}
+        </label>
+        <input id="forgejo-url"
+               v-model="state.url"
+               type="text"
+               :disabled="connected === true"
+               :placeholder="t('integration_forgejo', 'Forgejo instance address')"
+               @input="onInput"
+        >
+      </div>
+      <div v-show="!showOAuth"
+           class="line"
+      >
+        <label
+          for="forgejo-token"
+        >
+          <KeyIcon :size="20"
+                   class="icon"
+          />
+          {{ t('integration_forgejo', 'Personal access token') }}
+        </label>
+        <input
+          id="forgejo-token"
+          v-model="state.token"
+          type="password"
+          :disabled="connected === true"
+          :placeholder="t('integration_forgejo', 'Forgejo personal access token')"
+          @keyup.enter="onConnectClick"
+        >
+      </div>
+      <NcButton v-if="!connected"
+                id="forgejo-oauth"
+                :disabled="loading === true || (!showOAuth && !state.token)"
+                :class="{ loading }"
+                @click="onConnectClick"
+      >
+        <template #icon>
+          <OpenInNewIcon :size="20" />
+        </template>
+        {{ t('integration_forgejo', 'Connect to Forgejo') }}
+      </NcButton>
+      <div v-if="connected"
+           class="line"
+      >
+        <label class="forgejo-connected">
+          <CheckIcon :size="20"
+                     class="icon"
+          />
+          {{ t('integration_forgejo', 'Connected as {user}', { user: connectedAs }) }}
+        </label>
+        <NcButton @click="onLogoutClick">
+          <template #icon>
+            <CloseIcon :size="20" />
+          </template>
+          {{ t('integration_forgejo', 'Disconnect from Forgejo') }}
+        </NcButton>
+        <span />
+      </div>
+      <br>
+      <div v-if="connected"
+           id="forgejo-search-block"
+      >
+        <NcCheckboxRadioSwitch
+          :checked="state.search_enabled"
+          @update:checked="onCheckboxChanged($event, 'search_enabled')"
+        >
+          {{ t('integration_forgejo', 'Enable searching for repositories') }}
+        </NcCheckboxRadioSwitch>
+        <NcCheckboxRadioSwitch
+          :checked="state.search_issues_enabled"
+          @update:checked="onCheckboxChanged($event, 'search_issues_enabled')"
+        >
+          {{ t('integration_forgejo', 'Enable searching for issues') }}
+        </NcCheckboxRadioSwitch>
+        <NcCheckboxRadioSwitch
+          :checked="state.search_mrs_enabled"
+          @update:checked="onCheckboxChanged($event, 'search_mrs_enabled')"
+        >
+          {{ t('integration_forgejo', 'Enable searching for merge requests') }}
+        </NcCheckboxRadioSwitch>
+        <br>
+        <p v-if="state.search_enabled || state.search_issues_enabled"
+           class="settings-hint"
+        >
+          <InformationOutlineIcon :size="20"
+                                  class="icon"
+          />
+          {{ t('integration_forgejo', 'Warning, everything you type in the search bar will be sent to Forgejo.') }}
+        </p>
+      </div>
+      <NcCheckboxRadioSwitch
+        :checked="state.navigation_enabled"
+        @update:checked="onCheckboxChanged($event, 'navigation_enabled')"
+      >
+        {{ t('integration_forgejo', 'Enable navigation link') }}
+      </NcCheckboxRadioSwitch>
+      <NcCheckboxRadioSwitch
+        :checked="state.link_preview_enabled"
+        @update:checked="onCheckboxChanged($event, 'link_preview_enabled')"
+      >
+        {{ t('integration_forgejo', 'Enable Forgejo link previews') }}
+      </NcCheckboxRadioSwitch>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -102,7 +131,7 @@ import CheckIcon from 'vue-material-design-icons/Check.vue'
 import CloseIcon from 'vue-material-design-icons/Close.vue'
 import EarthIcon from 'vue-material-design-icons/Earth.vue'
 
-import GitlabIcon from './icons/GitlabIcon.vue'
+import ForgejoIcon from './icons/ForgejoIcon.vue'
 
 import { loadState } from '@nextcloud/initial-state'
 import { generateUrl } from '@nextcloud/router'
@@ -117,7 +146,7 @@ export default {
 	name: 'PersonalSettings',
 
 	components: {
-		GitlabIcon,
+		ForgejoIcon,
 		NcCheckboxRadioSwitch,
 		NcButton,
 		OpenInNewIcon,
@@ -132,7 +161,7 @@ export default {
 
 	data() {
 		return {
-			state: loadState('integration_gitlab', 'user-config'),
+			state: loadState('integration_forgejo', 'user-config'),
 			loading: false,
 		}
 	},
@@ -160,11 +189,11 @@ export default {
 		const paramString = window.location.search.slice(1)
 		// eslint-disable-next-line
 		const urlParams = new URLSearchParams(paramString)
-		const glToken = urlParams.get('gitlabToken')
-		if (glToken === 'success') {
-			showSuccess(t('integration_gitlab', 'Successfully connected to GitLab!'))
-		} else if (glToken === 'error') {
-			showError(t('integration_gitlab', 'Error connecting to GitLab:') + ' ' + urlParams.get('message'))
+		const token = urlParams.get('forgejoToken')
+		if (token === 'success') {
+			showSuccess(t('integration_forgejo', 'Successfully connected to Forgejo!'))
+		} else if (token === 'error') {
+			showError(t('integration_forgejo', 'Error connecting to Forgejo:') + ' ' + urlParams.get('message'))
 		}
 	},
 
@@ -187,22 +216,22 @@ export default {
 			const req = {
 				values,
 			}
-			const url = generateUrl('/apps/integration_gitlab/config')
+			const url = generateUrl('/apps/integration_forgejo/config')
 			axios.put(url, req).then((response) => {
 				if (response.data.user_name !== undefined) {
 					this.state.user_name = response.data.user_name
 					this.state.user_displayname = response.data.user_displayname
 					if (this.state.token && response.data.user_name === '') {
-						showError(t('integration_gitlab', 'Incorrect access token'))
+						showError(t('integration_forgejo', 'Incorrect access token'))
 					} else if (response.data.user_name) {
-						showSuccess(t('integration_gitlab', 'Successfully connected to GitLab!'))
+						showSuccess(t('integration_forgejo', 'Successfully connected to Forgejo!'))
 					}
 				} else {
-					showSuccess(t('integration_gitlab', 'GitLab options saved'))
+					showSuccess(t('integration_forgejo', 'Forgejo options saved'))
 				}
 			}).catch((error) => {
 				showError(
-					t('integration_gitlab', 'Failed to save GitLab options')
+					t('integration_forgejo', 'Failed to save Forgejo options')
 					+ ': ' + (error.response?.data?.error ?? '')
 				)
 				console.debug(error)
@@ -241,8 +270,8 @@ export default {
 </script>
 
 <style scoped lang="scss">
-#gitlab_prefs {
-	#gitlab-content {
+#forgejo_prefs {
+	#forgejo-content {
 		margin-left: 40px;
 	}
 	h2,

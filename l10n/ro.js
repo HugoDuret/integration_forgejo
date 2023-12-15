@@ -1,5 +1,5 @@
 OC.L10N.register(
-    "integration_gitlab",
+    "integration_forgejo",
     {
     "Error during OAuth exchanges" : "Eroare în schimbarea OAuth",
     "Bad HTTP method" : "Metodă HTTP nepotrivită",

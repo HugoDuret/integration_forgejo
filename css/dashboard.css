@@ -1,9 +1,9 @@
-.icon-gitlab {
+.icon-forgejo {
 	background-image: url(./../img/app-dark.svg);
 	filter: var(--background-invert-if-dark);
 }
 
 /* for NC <= 24 */
-body.theme--dark .icon-gitlab {
+body.theme--dark .icon-forgejo {
 	background-image: url(./../img/app.svg);
 }

@@ -1,5 +1,5 @@
 <?php
-namespace OCA\Gitlab\Settings;
+namespace OCA\Forgejo\Settings;
 
 use OCP\IURLGenerator;
 use OCP\IL10N;

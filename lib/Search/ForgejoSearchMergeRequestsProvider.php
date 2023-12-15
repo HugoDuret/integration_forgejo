@@ -3,9 +3,9 @@
 declare(strict_types=1);
 
 /**
- * @copyright Copyright (c) 2020, Julien Veyssier
+ * @copyright Copyright (c) 2020, Hugo Duret
  *
- * @author Julien Veyssier <julien-nc@posteo.net>
+ * @author Hugo Duret <hugoduret@hotmail.fr>
  *
  * @license AGPL-3.0
  *
@@ -22,10 +22,10 @@ declare(strict_types=1);
  * along with this program. If not, see <http://www.gnu.org/licenses/>
  *
  */
-namespace OCA\Gitlab\Search;
+namespace OCA\Forgejo\Search;
 
-use OCA\Gitlab\Service\GitlabAPIService;
-use OCA\Gitlab\AppInfo\Application;
+use OCA\Forgejo\Service\ForgejoAPIService;
+use OCA\Forgejo\AppInfo\Application;
 use OCP\App\IAppManager;
 use OCP\IL10N;
 use OCP\IConfig;
@@ -36,27 +36,27 @@ use OCP\Search\ISearchQuery;
 use OCP\Search\SearchResult;
 use OCP\Search\SearchResultEntry;
 
-class GitlabSearchReposProvider implements IProvider {
+class ForgejoSearchMergeRequestsProvider implements IProvider {
 
-	public function __construct(private IAppManager $appManager,
-								private IL10N $l10n,
-								private IConfig $config,
-								private IURLGenerator $urlGenerator,
-								private GitlabAPIService $service) {
+	public function __construct(private IAppManager      $appManager,
+								private IL10N            $l10n,
+								private IConfig          $config,
+								private IURLGenerator    $urlGenerator,
+								private ForgejoAPIService $service) {
 	}
 
 	/**
 	 * @inheritDoc
 	 */
 	public function getId(): string {
-		return 'gitlab-search-repos';
+		return 'forgejo-search-mrs';
 	}
 
 	/**
 	 * @inheritDoc
 	 */
 	public function getName(): string {
-		return $this->l10n->t('GitLab repositories');
+		return $this->l10n->t('Forgejo merge requests');
 	}
 
 	/**
@@ -64,7 +64,7 @@ class GitlabSearchReposProvider implements IProvider {
 	 */
 	public function getOrder(string $route, array $routeParameters): int {
 		if (strpos($route, Application::APP_ID . '.') === 0) {
-			// Active app, prefer Gitlab results
+			// Active app, prefer Forgejo results
 			return -1;
 		}
 
@@ -87,8 +87,8 @@ class GitlabSearchReposProvider implements IProvider {
 		$routeFrom = $query->getRoute();
 		$requestedFromSmartPicker = $routeFrom === '' || $routeFrom === 'smart-picker';
 
-		$searchEnabled = $this->config->getUserValue($user->getUID(), Application::APP_ID, 'search_enabled', '0') === '1';
-		if (!$requestedFromSmartPicker && !$searchEnabled) {
+		$searchMRsEnabled = $this->config->getUserValue($user->getUID(), Application::APP_ID, 'search_mrs_enabled', '0') === '1';
+		if (!$requestedFromSmartPicker && !$searchMRsEnabled) {
 			return SearchResult::paginated($this->getName(), [], 0);
 		}
 
@@ -97,24 +97,25 @@ class GitlabSearchReposProvider implements IProvider {
 			return SearchResult::paginated($this->getName(), [], 0);
 		}
 
-		$searchResult = $this->service->searchRepositories($user->getUID(), $term, $offset, $limit);
+		$adminOauthUrl = $this->config->getAppValue(Application::APP_ID, 'oauth_instance_url', Application::DEFAULT_FORGEJO_URL) ?: Application::DEFAULT_FORGEJO_URL;
+		$url = $this->config->getUserValue($user->getUID(), Application::APP_ID, 'url', $adminOauthUrl) ?: $adminOauthUrl;
+
+		$mergeRequests = $this->service->searchMergeRequests($user->getUID(), $term, $offset, $limit);
 		if (isset($searchResult['error'])) {
-			$repos = [];
-		} else {
-			$repos = $searchResult;
+			return SearchResult::paginated($this->getName(), [], 0);
 		}
 
-		$formattedResults = array_map(function (array $entry): SearchResultEntry {
+		$formattedResults = array_map(function (array $entry) use ($url): SearchResultEntry {
 			$finalThumbnailUrl = $this->getThumbnailUrl($entry);
 			return new SearchResultEntry(
 				$finalThumbnailUrl,
 				$this->getMainText($entry),
-				$this->getSubline($entry),
-				$this->getLinkToGitlab($entry),
-				$finalThumbnailUrl === '' ? 'icon-gitlab-search-fallback' : '',
+				$this->getSubline($entry, $url),
+				$this->getLinkToForgejo($entry),
+				$finalThumbnailUrl === '' ? 'icon-forgejo-search-fallback' : '',
 				true
 			);
-		}, $repos);
+		}, $mergeRequests);
 
 		return SearchResult::paginated(
 			$this->getName(),
@@ -128,34 +129,49 @@ class GitlabSearchReposProvider implements IProvider {
 	 * @return string
 	 */
 	protected function getMainText(array $entry): string {
-		return $entry['path_with_namespace'] . ' [' . ($entry['star_count'] ?? 0) . '⭐]';
+		$stateChar = $entry['state'] === 'merged'
+			? '✅'
+			: ($entry['state'] === 'closed'
+				? '❌'
+				: '⋯');
+		return $stateChar . ' ' . $entry['title'];
+	}
+
+	/**
+	 * @param array $entry
+	 * @param string $url
+	 * @return string
+	 */
+	protected function getSubline(array $entry, string $url): string {
+		$repoFullName = str_replace($url, '', $entry['web_url']);
+		$repoFullName = preg_replace('/\/?-?\/merge_requests\/.*/', '', $repoFullName);
+		$repoFullName = preg_replace('/^\//', '', $repoFullName);
+//		$spl = explode('/', $repoFullName);
+//		$owner = $spl[0];
+//		$repo = $spl[1];
+		$number = $entry['iid'];
+		$typeChar = '⑃';
+		$idChar = '!';
+		return $typeChar . ' '. $idChar . $number . ' ' . $repoFullName;
 	}
 
 	/**
 	 * @param array $entry
 	 * @return string
 	 */
-	protected function getSubline(array $entry): string {
-		return $entry['description'] ?? '';
-	}
-
-	/**
-	 * @param array $entry
-	 * @return string
-	 */
-	protected function getLinkToGitlab(array $entry): string {
+	protected function getLinkToForgejo(array $entry): string {
 		return $entry['web_url'] ?? '';
 	}
 
 	/**
 	 * @param array $entry
+	 * @param string $thumbnailUrl
 	 * @return string
 	 */
 	protected function getThumbnailUrl(array $entry): string {
-		$projectId = $entry['id'] ?? '';
-		$avatarUrl = $entry['avatar_url'] ?? '';
-		return $avatarUrl
-			? $this->urlGenerator->linkToRoute('integration_gitlab.gitlabAPI.getProjectAvatar', []) . '?projectId=' . urlencode(strval($projectId))
+		$userId = $entry['author']['id'] ?? '';
+		return $userId
+			? $this->urlGenerator->linkToRoute('integration_forgejo.forgejoAPI.getUserAvatar', ['userId' => $userId])
 			: '';
 	}
 }

@@ -1,12 +1,12 @@
 <?php
-namespace OCA\Gitlab\Settings;
+namespace OCA\Forgejo\Settings;
 
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\AppFramework\Services\IInitialState;
 use OCP\IConfig;
 use OCP\Settings\ISettings;
 
-use OCA\Gitlab\AppInfo\Application;
+use OCA\Forgejo\AppInfo\Application;
 
 class Admin implements ISettings {
 

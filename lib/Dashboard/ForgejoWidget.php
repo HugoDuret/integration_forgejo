@@ -1,8 +1,8 @@
 <?php
 /**
- * @copyright Copyright (c) 2020 Julien Veyssier <julien-nc@posteo.net>
+ * @copyright Copyright (c) 2020 Hugo Duret <hugoduret@hotmail.fr>
  *
- * @author Julien Veyssier <julien-nc@posteo.net>
+ * @author Hugo Duret <hugoduret@hotmail.fr>
  *
  * @license GNU AGPL version 3 or any later version
  *
@@ -21,7 +21,7 @@
  *
  */
 
-namespace OCA\Gitlab\Dashboard;
+namespace OCA\Forgejo\Dashboard;
 
 use OCP\AppFramework\Services\IInitialState;
 use OCP\Dashboard\IWidget;
@@ -30,9 +30,9 @@ use OCP\IL10N;
 use OCP\IURLGenerator;
 use OCP\Util;
 
-use OCA\Gitlab\AppInfo\Application;
+use OCA\Forgejo\AppInfo\Application;
 
-class GitlabWidget implements IWidget {
+class ForgejoWidget implements IWidget {
 
 	public function __construct(private IL10N $l10n,
 								private IConfig $config,
@@ -45,14 +45,14 @@ class GitlabWidget implements IWidget {
 	 * @inheritDoc
 	 */
 	public function getId(): string {
-		return 'gitlab_todos';
+		return 'forgejo_todos';
 	}
 
 	/**
 	 * @inheritDoc
 	 */
 	public function getTitle(): string {
-		return $this->l10n->t('GitLab To-Dos');
+		return $this->l10n->t('Forgejo To-Dos');
 		}
 
 	/**
@@ -66,7 +66,7 @@ class GitlabWidget implements IWidget {
 	 * @inheritDoc
 	 */
 	public function getIconClass(): string {
-		return 'icon-gitlab';
+		return 'icon-forgejo';
 	}
 
 	/**
@@ -82,7 +82,7 @@ class GitlabWidget implements IWidget {
 	public function load(): void {
 		$clientID = $this->config->getAppValue(Application::APP_ID, 'client_id');
 		$clientSecret = $this->config->getAppValue(Application::APP_ID, 'client_secret');
-		$adminOauthUrl = $this->config->getAppValue(Application::APP_ID, 'oauth_instance_url', Application::DEFAULT_GITLAB_URL) ?: Application::DEFAULT_GITLAB_URL;
+		$adminOauthUrl = $this->config->getAppValue(Application::APP_ID, 'oauth_instance_url', Application::DEFAULT_FORGEJO_URL) ?: Application::DEFAULT_FORGEJO_URL;
 		$url = $this->config->getUserValue($this->userId, Application::APP_ID, 'url', $adminOauthUrl) ?: $adminOauthUrl;
 		$oauthPossible = $clientID !== '' && $clientSecret !== '' && $url === $adminOauthUrl;
 		$usePopup = $this->config->getAppValue(Application::APP_ID, 'use_popup', '0');

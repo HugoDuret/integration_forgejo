@@ -1,29 +1,28 @@
 <?xml version="1.0"?>
 <info>
-    <id>integration_gitlab</id>
-    <name>GitLab integration</name>
-    <summary>Integration of GitLab software development management service</summary>
-    <description><![CDATA[GitLab integration provides a dashboard widget displaying your most important notifications
-    and a unified search provider for repositories, issues and merge requests.]]></description>
+    <id>integration_forgejo</id>
+    <name>Forgejo integration</name>
+    <summary>Integration of Forgejo software development management service</summary>
+    <description><![CDATA[Forgejo integration provides a dashboard widget displaying your most important notifications.]]></description>
     <version>1.0.18</version>
     <licence>agpl</licence>
-    <author>Julien Veyssier</author>
-    <namespace>Gitlab</namespace>
+    <author>Hugo Duret</author>
+    <namespace>Forgejo</namespace>
     <documentation>
-        <developer>https://github.com/nextcloud/integration_gitlab</developer>
+        <developer>https://github.com/HugoDuret/integration_forgejo</developer>
     </documentation>
     <category>integration</category>
     <category>dashboard</category>
-    <website>https://github.com/nextcloud/integration_gitlab</website>
-    <bugs>https://github.com/nextcloud/integration_gitlab/issues</bugs>
-    <screenshot>https://github.com/nextcloud/integration_gitlab/raw/main/img/screenshot1.jpg</screenshot>
+    <website>https://github.com/HugoDuret/integration_forgejo</website>
+    <bugs>https://github.com/HugoDuret/integration_forgejo/issues</bugs>
+    <screenshot>https://github.com/HugoDuret/integration_forgejo/raw/main/img/screenshot1.jpg</screenshot>
     <dependencies>
         <nextcloud min-version="26" max-version="28"/>
     </dependencies>
     <settings>
-        <admin>OCA\Gitlab\Settings\Admin</admin>
-        <admin-section>OCA\Gitlab\Settings\AdminSection</admin-section>
-        <personal>OCA\Gitlab\Settings\Personal</personal>
-        <personal-section>OCA\Gitlab\Settings\PersonalSection</personal-section>
+        <admin>OCA\Forgejo\Settings\Admin</admin>
+        <admin-section>OCA\Forgejo\Settings\AdminSection</admin-section>
+        <personal>OCA\Forgejo\Settings\Personal</personal>
+        <personal-section>OCA\Forgejo\Settings\PersonalSection</personal-section>
     </settings>
 </info>

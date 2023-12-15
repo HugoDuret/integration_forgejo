@@ -12,7 +12,7 @@ webpackConfig.stats = {
 	modules: false,
 }
 
-const appId = 'integration_gitlab'
+const appId = 'integration_forgejo'
 webpackConfig.entry = {
 	personalSettings: { import: path.join(__dirname, 'src', 'personalSettings.js'), filename: appId + '-personalSettings.js' },
 	adminSettings: { import: path.join(__dirname, 'src', 'adminSettings.js'), filename: appId + '-adminSettings.js' },

@@ -1,5 +1,5 @@
 OC.L10N.register(
-    "integration_gitlab",
+    "integration_forgejo",
     {
     "Bad HTTP method" : "Phương thức HTTP không hợp lệ",
     "Connected as {user}" : "Kết nối bởi {user}",

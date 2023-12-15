@@ -1,12 +1,12 @@
 <?php
-namespace OCA\Gitlab\Settings;
+namespace OCA\Forgejo\Settings;
 
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\AppFramework\Services\IInitialState;
 use OCP\IConfig;
 use OCP\Settings\ISettings;
 
-use OCA\Gitlab\AppInfo\Application;
+use OCA\Forgejo\AppInfo\Application;
 
 class Personal implements ISettings {
 
@@ -33,7 +33,7 @@ class Personal implements ISettings {
 		$clientID = $this->config->getAppValue(Application::APP_ID, 'client_id');
 		// don't expose the client secret to users
 		$clientSecret = ($this->config->getAppValue(Application::APP_ID, 'client_secret') !== '');
-		$adminOauthUrl = $this->config->getAppValue(Application::APP_ID, 'oauth_instance_url', Application::DEFAULT_GITLAB_URL) ?: Application::DEFAULT_GITLAB_URL;
+		$adminOauthUrl = $this->config->getAppValue(Application::APP_ID, 'oauth_instance_url', Application::DEFAULT_FORGEJO_URL) ?: Application::DEFAULT_FORGEJO_URL;
 		$usePopup = $this->config->getAppValue(Application::APP_ID, 'use_popup', '0');
 
 		$url = $this->config->getUserValue($this->userId, Application::APP_ID, 'url', $adminOauthUrl) ?: $adminOauthUrl;

@@ -1,7 +1,7 @@
 /**
- * @copyright Copyright (c) 2022 Julien Veyssier <julien-nc@posteo.net>
+ * @copyright Copyright (c) 2022 Hugo Duret <hugoduret@hotmail.fr>
  *
- * @author Julien Veyssier <julien-nc@posteo.net>
+ * @author Hugo Duret <hugoduret@hotmail.fr>
  *
  * @license AGPL-3.0-or-later
  *
@@ -24,13 +24,13 @@ import { linkTo } from '@nextcloud/router'
 import { getRequestToken } from '@nextcloud/auth'
 
 __webpack_nonce__ = btoa(getRequestToken()) // eslint-disable-line
-__webpack_public_path__ = linkTo('integration_gitlab', 'js/') // eslint-disable-line
+__webpack_public_path__ = linkTo('integration_forgejo', 'js/') // eslint-disable-line
 
-registerWidget('integration_gitlab', async (el, { richObjectType, richObject, accessible }) => {
+registerWidget('integration_forgejo', async (el, { richObjectType, richObject, accessible }) => {
 	const { default: Vue } = await import(/* webpackChunkName: "reference-lazy" */'vue')
 	Vue.mixin({ methods: { t, n } })
-	const { default: ReferenceGitlabWidget } = await import(/* webpackChunkName: "reference-lazy" */'./views/ReferenceGitlabWidget.vue')
-	const Widget = Vue.extend(ReferenceGitlabWidget)
+	const { default: ReferenceForgejoWidget } = await import(/* webpackChunkName: "reference-lazy" */'./views/ReferenceForgejoWidget.vue')
+	const Widget = Vue.extend(ReferenceForgejoWidget)
 	new Widget({
 		propsData: {
 			richObjectType,

@@ -1,9 +1,9 @@
 OC.L10N.register(
-    "integration_gitlab",
+    "integration_forgejo",
     {
     "Error getting OAuth access token. " : "Det gick inte att hämta OAuth-åtkomsttoken.",
     "Error during OAuth exchanges" : "Fel vid utväxling av OAuth-token",
-    "GitLab repositories" : "GitLab-arkiv",
+    "Forgejo repositories" : "Forgejo-arkiv",
     "Bad HTTP method" : "Felaktig HTTP-metod",
     "Bad credentials" : "Ogiltiga inloggningsuppgifter",
     "OAuth access token refused" : "OAuth-token avvisades",
@@ -13,7 +13,7 @@ OC.L10N.register(
     "Personal access token" : "Personlig åtkomst-token",
     "Connected as {user}" : "Ansluten som {user}",
     "Enable searching for repositories" : "Aktivera sökning efter arkiv",
-    "Warning, everything you type in the search bar will be sent to GitLab." : "Varning, allt du skriver i sökfältet skickas till GitLab.",
+    "Warning, everything you type in the search bar will be sent to Forgejo." : "Varning, allt du skriver i sökfältet skickas till Forgejo.",
     "Enable navigation link" : "Aktivera navigeringslänk",
     "Incorrect access token" : "Ogiltig åtkomst-token",
     "Mark as done" : "Markera som klar",

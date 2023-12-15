@@ -1,8 +1,8 @@
 <?php
 /**
- * @copyright Copyright (c) 2022 Julien Veyssier <julien-nc@posteo.net>
+ * @copyright Copyright (c) 2022 Hugo Duret <hugoduret@hotmail.fr>
  *
- * @author Julien Veyssier <julien-nc@posteo.net>
+ * @author Hugo Duret <hugoduret@hotmail.fr>
  *
  * @license GNU AGPL version 3 or any later version
  *
@@ -20,15 +20,15 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace OCA\Gitlab\Listener;
+namespace OCA\Forgejo\Listener;
 
-use OCA\Gitlab\AppInfo\Application;
+use OCA\Forgejo\AppInfo\Application;
 use OCP\Collaboration\Reference\RenderReferenceEvent;
 use OCP\EventDispatcher\Event;
 use OCP\EventDispatcher\IEventListener;
 use OCP\Util;
 
-class GitlabReferenceListener implements IEventListener {
+class ForgejoReferenceListener implements IEventListener {
 	public function handle(Event $event): void {
 		if (!$event instanceof RenderReferenceEvent) {
 			return;

@@ -1,5 +1,5 @@
 OC.L10N.register(
-    "integration_gitlab",
+    "integration_forgejo",
     {
     "Error during OAuth exchanges" : "OAuth 교환 중 오류가 발생했습니다.",
     "Bad HTTP method" : "옳지 않은 HTTP 메소드",

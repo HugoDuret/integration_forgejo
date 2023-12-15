@@ -1,7 +1,7 @@
 OC.L10N.register(
-    "integration_gitlab",
+    "integration_forgejo",
     {
-    "GitLab" : "GitLab",
+    "Forgejo" : "Forgejo",
     "Error during OAuth exchanges" : "Грешка при размена на податоци за OAuth ",
     "Bad credentials" : "Неточни акредитиви",
     "OAuth access token refused" : "Одбиен OAuth пристапен токен ",

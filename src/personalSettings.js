@@ -1,14 +1,14 @@
 /* jshint esversion: 6 */
 
 /**
- * Nextcloud - gitlab
+ * Nextcloud - forgejo
  *
  *
  * This file is licensed under the Affero General Public License version 3 or
  * later. See the COPYING file.
  *
- * @author Julien Veyssier <julien-nc@posteo.net>
- * @copyright Julien Veyssier 2020
+ * @author Hugo Duret <hugoduret@hotmail.fr>
+ * @copyright Hugo Duret 2023
  */
 
 import Vue from 'vue'
@@ -20,6 +20,6 @@ import PersonalSettings from './components/PersonalSettings.vue'
 
 // eslint-disable-next-line
 new Vue({
-	el: '#gitlab_prefs',
+	el: '#forgejo_prefs',
 	render: h => h(PersonalSettings),
 })

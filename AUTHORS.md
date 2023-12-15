@@ -1,4 +1,5 @@
 # Authors
 
-* Julien Veyssier <julien-nc@posteo.net> (Developper)
+* Hugo Duret <hugoduret@hotmail.fr> (Developper)
+* Hugo DURET <hugoduret@hotmail.fr> (Developper)
 

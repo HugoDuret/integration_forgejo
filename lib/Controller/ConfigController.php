@@ -1,18 +1,18 @@
 <?php
 /**
- * Nextcloud - gitlab
+ * Nextcloud - forgejo
  *
  * This file is licensed under the Affero General Public License version 3 or
  * later. See the COPYING file.
  *
- * @author Julien Veyssier <julien-nc@posteo.net>
- * @copyright Julien Veyssier 2020
+ * @author Hugo Duret <hugoduret@hotmail.fr>
+ * @copyright Hugo Duret 2023
  */
 
-namespace OCA\Gitlab\Controller;
+namespace OCA\Forgejo\Controller;
 
 use DateTime;
-use OCA\Gitlab\Reference\GitlabReferenceProvider;
+use OCA\Forgejo\Reference\ForgejoReferenceProvider;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\AppFramework\Services\IInitialState;
@@ -24,8 +24,8 @@ use OCP\IRequest;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\Controller;
 
-use OCA\Gitlab\Service\GitlabAPIService;
-use OCA\Gitlab\AppInfo\Application;
+use OCA\Forgejo\Service\ForgejoAPIService;
+use OCA\Forgejo\AppInfo\Application;
 use OCP\PreConditionNotMetException;
 
 class ConfigController extends Controller {
@@ -36,8 +36,8 @@ class ConfigController extends Controller {
 								private IURLGenerator $urlGenerator,
 								private IL10N $l,
 								private IInitialState $initialStateService,
-								private GitlabAPIService $gitlabAPIService,
-								private GitlabReferenceProvider $gitlabReferenceProvider,
+								private ForgejoAPIService $forgejoAPIService,
+								private ForgejoReferenceProvider $forgejoReferenceProvider,
 								private ?string $userId) {
 		parent::__construct($appName, $request);
 	}
@@ -55,7 +55,7 @@ class ConfigController extends Controller {
 		if (isset($values['token']) && $values['token'] === '') {
 			$tokenType = $this->config->getUserValue($this->userId, Application::APP_ID, 'token_type');
 			if ($tokenType === 'oauth') {
-				$this->gitlabAPIService->revokeOauthToken($this->userId);
+				$this->forgejoAPIService->revokeOauthToken($this->userId);
 			}
 		}
 
@@ -69,7 +69,7 @@ class ConfigController extends Controller {
 			$this->config->deleteUserValue($this->userId, Application::APP_ID, 'token_type');
 			$this->config->deleteUserValue($this->userId, Application::APP_ID, 'refresh_token');
 			$this->config->deleteUserValue($this->userId, Application::APP_ID, 'token_expires_at');
-			$this->gitlabReferenceProvider->invalidateUserCache($this->userId);
+			$this->forgejoReferenceProvider->invalidateUserCache($this->userId);
 
 			if ($values['token'] && $values['token'] !== '') {
 				$info = $this->storeUserInfo();
@@ -139,9 +139,9 @@ class ConfigController extends Controller {
 
 		if ($clientID and $clientSecret and $configState !== '' and $configState === $state) {
 			$redirect_uri = $this->config->getUserValue($this->userId, Application::APP_ID, 'redirect_uri');
-			$adminOauthUrl = $this->config->getAppValue(Application::APP_ID, 'oauth_instance_url', Application::DEFAULT_GITLAB_URL) ?: Application::DEFAULT_GITLAB_URL;
-			$gitlabUrl = $this->config->getUserValue($this->userId, Application::APP_ID, 'url', $adminOauthUrl) ?: $adminOauthUrl;
-			$result = $this->gitlabAPIService->requestOAuthAccessToken($gitlabUrl, [
+			$adminOauthUrl = $this->config->getAppValue(Application::APP_ID, 'oauth_instance_url', Application::DEFAULT_FORGEJO_URL) ?: Application::DEFAULT_FORGEJO_URL;
+			$forgejoUrl = $this->config->getUserValue($this->userId, Application::APP_ID, 'url', $adminOauthUrl) ?: $adminOauthUrl;
+			$result = $this->forgejoAPIService->requestOAuthAccessToken($forgejoUrl, [
 				'client_id' => $clientID,
 				'client_secret' => $clientSecret,
 				'code' => $code,
@@ -149,7 +149,7 @@ class ConfigController extends Controller {
 				'grant_type' => 'authorization_code'
 			], 'POST');
 			if (isset($result['access_token'])) {
-				$this->gitlabReferenceProvider->invalidateUserCache($this->userId);
+				$this->forgejoReferenceProvider->invalidateUserCache($this->userId);
 				$accessToken = $result['access_token'];
 				$refreshToken = $result['refresh_token'] ?? '';
 				if (isset($result['expires_in'])) {
@@ -165,7 +165,7 @@ class ConfigController extends Controller {
 				$usePopup = $this->config->getAppValue(Application::APP_ID, 'use_popup', '0') === '1';
 				if ($usePopup) {
 					return new RedirectResponse(
-						$this->urlGenerator->linkToRoute('integration_gitlab.config.popupSuccessPage', [
+						$this->urlGenerator->linkToRoute('integration_forgejo.config.popupSuccessPage', [
 							'user_name' => $userInfo['username'] ?? '',
 							'user_displayname' => $userInfo['userdisplayname'] ?? '',
 						])
@@ -176,7 +176,7 @@ class ConfigController extends Controller {
 					if ($oauthOrigin === 'settings') {
 						return new RedirectResponse(
 							$this->urlGenerator->linkToRoute('settings.PersonalSettings.index', ['section' => 'connected-accounts']) .
-							'?gitlabToken=success'
+							'?forgejoToken=success'
 						);
 					} elseif ($oauthOrigin === 'dashboard') {
 						return new RedirectResponse(
@@ -185,7 +185,7 @@ class ConfigController extends Controller {
 					}
 					return new RedirectResponse(
 						$this->urlGenerator->linkToRoute('settings.PersonalSettings.index', ['section' => 'connected-accounts']) .
-						'?gitlabToken=success'
+						'?forgejoToken=success'
 					);
 				}
 			}
@@ -195,7 +195,7 @@ class ConfigController extends Controller {
 		}
 		return new RedirectResponse(
 			$this->urlGenerator->linkToRoute('settings.PersonalSettings.index', ['section' => 'connected-accounts']) .
-			'?gitlabToken=error&message=' . urlencode($result)
+			'?forgejoToken=error&message=' . urlencode($result)
 		);
 	}
 
@@ -204,7 +204,7 @@ class ConfigController extends Controller {
 	 * @throws PreConditionNotMetException
 	 */
 	private function storeUserInfo(): array {
-		$info = $this->gitlabAPIService->request($this->userId, 'user');
+		$info = $this->forgejoAPIService->request($this->userId, 'user');
 		if (isset($info['username']) && isset($info['id'])) {
 			$this->config->setUserValue($this->userId, Application::APP_ID, 'user_id', $info['id']);
 			$this->config->setUserValue($this->userId, Application::APP_ID, 'user_name', $info['username']);

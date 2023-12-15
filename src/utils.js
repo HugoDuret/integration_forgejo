@@ -14,11 +14,11 @@ export function delay(callback, ms) {
 	}
 }
 
-export function oauthConnect(gitlabUrl, clientId, oauthOrigin, usePopup = false) {
-	const redirectUri = window.location.protocol + '//' + window.location.host + generateUrl('/apps/integration_gitlab/oauth-redirect')
+export function oauthConnect(forgejoUrl, clientId, oauthOrigin, usePopup = false) {
+	const redirectUri = window.location.protocol + '//' + window.location.host + generateUrl('/apps/integration_forgejo/oauth-redirect')
 
 	const oauthState = Math.random().toString(36).substring(3)
-	const requestUrl = gitlabUrl + '/oauth/authorize'
+	const requestUrl = forgejoUrl + '/oauth/authorize'
 		+ '?client_id=' + encodeURIComponent(clientId)
 		+ '&redirect_uri=' + encodeURIComponent(redirectUri)
 		+ '&response_type=code'
@@ -32,13 +32,13 @@ export function oauthConnect(gitlabUrl, clientId, oauthOrigin, usePopup = false)
 			oauth_origin: usePopup ? undefined : oauthOrigin,
 		},
 	}
-	const url = generateUrl('/apps/integration_gitlab/config')
+	const url = generateUrl('/apps/integration_forgejo/config')
 	return new Promise((resolve, reject) => {
 		axios.put(url, req).then((response) => {
 			if (usePopup) {
 				const ssoWindow = window.open(
 					requestUrl,
-					t('integration_gitlab', 'Connect to GitLab'),
+					t('integration_forgejo', 'Connect to Forgejo'),
 					'toolbar=no, menubar=no, width=600, height=700')
 				ssoWindow.focus()
 				window.addEventListener('message', (event) => {
@@ -50,7 +50,7 @@ export function oauthConnect(gitlabUrl, clientId, oauthOrigin, usePopup = false)
 			}
 		}).catch((error) => {
 			showError(
-				t('integration_gitlab', 'Failed to save GitLab OAuth state')
+				t('integration_forgejo', 'Failed to save Forgejo OAuth state')
 				+ ': ' + (error.response?.request?.responseText ?? '')
 			)
 			console.error(error)
@@ -58,30 +58,30 @@ export function oauthConnect(gitlabUrl, clientId, oauthOrigin, usePopup = false)
 	})
 }
 
-export function oauthConnectConfirmDialog(gitlabUrl) {
+export function oauthConnectConfirmDialog(forgejoUrl) {
 	return new Promise((resolve, reject) => {
 		const settingsLink = generateUrl('/settings/user/connected-accounts')
-		const linkText = t('integration_gitlab', 'Connected accounts')
+		const linkText = t('integration_forgejo', 'Connected accounts')
 		const settingsHtmlLink = `<a href="${settingsLink}" class="external">${linkText}</a>`
 		OC.dialogs.message(
-			t('integration_gitlab', 'You need to connect before using the GitLab integration.')
+			t('integration_forgejo', 'You need to connect before using the Forgejo integration.')
 			+ '<br><br>'
-			+ t('integration_gitlab', 'Do you want to connect to {gitlabUrl}?', { gitlabUrl })
+			+ t('integration_forgejo', 'Do you want to connect to {forgejoUrl}?', { forgejoUrl })
 			+ '<br><br>'
 			+ t(
-				'integration_gitlab',
-				'You can choose another GitLab server in the {settingsHtmlLink} section of your personal settings.',
+				'integration_forgejo',
+				'You can choose another Forgejo server in the {settingsHtmlLink} section of your personal settings.',
 				{ settingsHtmlLink },
 				null,
 				{ escape: false }
 			),
-			t('integration_gitlab', 'Connect to GitLab'),
+			t('integration_forgejo', 'Connect to Forgejo'),
 			'none',
 			{
 				type: OC.dialogs.YES_NO_BUTTONS,
-				confirm: t('integration_gitlab', 'Connect'),
+				confirm: t('integration_forgejo', 'Connect'),
 				confirmClasses: 'success',
-				cancel: t('integration_gitlab', 'Cancel'),
+				cancel: t('integration_forgejo', 'Cancel'),
 			},
 			(result) => {
 				resolve(result)

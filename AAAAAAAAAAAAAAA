@@ -1,0 +1,19 @@
+lib/Listener et lib/Referenes pas sûr que ça soit utile
+lib/Search à édtier ou supprimer ?
+mettre changelo que notifications et repos
+l10n note : traduction juste chnager gitlab pour forjo
+
+bon bah essaye
+
+admin/admin
+
+j'essayais de build le js directory avec webpack car j'ai l'impression que le js n'est pas build !
+maybe souci car j'utilise le webpack local et du coup grosse merde sur le path ? car integ gitlab a fonctionné avant et plus après avce weback local ? ou une histoire de version?
+
+lance un npm run dev et ça marche NIQUEL !
+
+j'ajoutais les repos en plus des notifs car j'ai pas de notifs
+mais en vrai vire le repos et laiosse juste les notifs ? à reflechir moins plein de champagne
+
+OK J4AVAIS REUSSI A VOIR LES REPOS SANS FILTRE
+ET LE BOUTON? DU COUP VERS LES NOTIFS EST NUL MAIS BON
