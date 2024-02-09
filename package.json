@@ -17,7 +17,7 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/HugoDuret/integration_forgejo"
+		"url": "https://github.com/CEA-Hugo-Duret/nextcloud_integration_forgejo"
 	},
 	"keywords": [
 		"forgejo"
@@ -25,9 +25,9 @@
 	"author": "Hugo Duret",
 	"license": "AGPL-3.0",
 	"bugs": {
-		"url": "https://github.com/HugoDuret/integration_forgejo/issues"
+		"url": "https://github.com/CEA-Hugo-Duret/nextcloud_integration_forgejo/issues"
 	},
-	"homepage": "https://github.com/HugoDuret/integration_forgejo",
+	"homepage": "https://github.com/CEA-Hugo-Duret/nextcloud_integration_forgejo",
 	"browserslist": [
 		"extends @nextcloud/browserslist-config"
 	],

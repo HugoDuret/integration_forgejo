@@ -1,12 +1,14 @@
 <?php
 /**
- * Nextcloud - forgejo
+ * @copyright hugo.duret@cea.fr 2024
  *
- * This file is licensed under the Affero General Public License version 3 or
- * later. See the COPYING file.
+ * Use of this source code is governed by an MIT-style
+ * license that can be found in the LICENSE file or at
+ * https://opensource.org/licenses/MIT.
+ *  
+ * Contributors:
+ *  @author Hugo Duret  hugo.duret@cea.fr - Initial implementation
  *
- * @author Hugo Duret <hugoduret@hotmail.fr>
- * @copyright Hugo Duret 2023
  */
 
 namespace OCA\Forgejo\Controller;
@@ -22,17 +24,20 @@ use OCA\Forgejo\Service\ForgejoAPIService;
 use OCA\Forgejo\AppInfo\Application;
 use OCP\IURLGenerator;
 
-class ForgejoAPIController extends Controller {
+class ForgejoAPIController extends Controller
+{
 
 	private string $accessToken;
 	private string $forgejoUrl;
 
-	public function __construct(string                   $appName,
-								IRequest                 $request,
-								private IConfig          $config,
-								private IURLGenerator    $urlGenerator,
-								private ForgejoAPIService $forgejoAPIService,
-								private ?string          $userId) {
+	public function __construct(
+		string $appName,
+		IRequest $request,
+		private IConfig $config,
+		private IURLGenerator $urlGenerator,
+		private ForgejoAPIService $forgejoAPIService,
+		private ?string $userId
+	) {
 		parent::__construct($appName, $request);
 		$this->accessToken = $this->config->getUserValue($this->userId, Application::APP_ID, 'token');
 		$adminOauthUrl = $this->config->getAppValue(Application::APP_ID, 'oauth_instance_url', Application::DEFAULT_FORGEJO_URL) ?: Application::DEFAULT_FORGEJO_URL;
@@ -47,7 +52,8 @@ class ForgejoAPIController extends Controller {
 	 * @return DataResponse
 	 * @throws \Exception
 	 */
-	public function getNotifications(?string $since = null): DataResponse {
+	public function getNotifications(?string $since = null): DataResponse
+	{
 		if ($this->accessToken === '') {
 			return new DataResponse('', 400);
 		}
@@ -68,7 +74,8 @@ class ForgejoAPIController extends Controller {
 	 * @return DataResponse
 	 * @throws \Exception
 	 */
-	public function getRepos(?string $since = null): DataResponse {
+	public function getRepos(?string $since = null): DataResponse
+	{
 		if ($this->accessToken === '') {
 			return new DataResponse('', 400);
 		}

@@ -1,10 +1,14 @@
 <?php
 /**
- * Nextcloud - Forgejo
+ * @copyright hugo.duret@cea.fr 2024
  *
+ * Use of this source code is governed by an MIT-style
+ * license that can be found in the LICENSE file or at
+ * https://opensource.org/licenses/MIT.
+ *  
+ * Contributors:
+ *  @author Hugo Duret  hugo.duret@cea.fr - Initial implementation
  *
- * @author Hugo Duret <hugoduret@hotmail.fr>
- * @copyright Hugo Duret 2023
  */
 
 namespace OCA\Forgejo\AppInfo;
@@ -30,20 +34,23 @@ use OCA\Forgejo\Search\ForgejoSearchMergeRequestsProvider;
 use OCA\Forgejo\Search\ForgejoSearchReposProvider;
 use OCP\Util;
 
-class Application extends App implements IBootstrap {
+class Application extends App implements IBootstrap
+{
 	public const APP_ID = 'integration_forgejo';
 	public const DEFAULT_FORGEJO_URL = 'https://next.forgejo.org';
 
 	private IConfig $config;
 
-	public function __construct(array $urlParams = []) {
+	public function __construct(array $urlParams = [])
+	{
 		parent::__construct(self::APP_ID, $urlParams);
 
 		$container = $this->getContainer();
 		$this->config = $container->get(IConfig::class);
 	}
 
-	public function register(IRegistrationContext $context): void {
+	public function register(IRegistrationContext $context): void
+	{
 		$context->registerDashboardWidget(ForgejoWidget::class);
 		$context->registerSearchProvider(ForgejoSearchIssuesProvider::class);
 		$context->registerSearchProvider(ForgejoSearchMergeRequestsProvider::class);
@@ -53,12 +60,14 @@ class Application extends App implements IBootstrap {
 		$context->registerEventListener(RenderReferenceEvent::class, ForgejoReferenceListener::class);
 	}
 
-	public function boot(IBootContext $context): void {
+	public function boot(IBootContext $context): void
+	{
 		$context->injectFn(Closure::fromCallable([$this, 'registerNavigation']));
 		Util::addStyle(self::APP_ID, 'forgejo-search');
 	}
 
-	public function registerNavigation(IUserSession $userSession): void {
+	public function registerNavigation(IUserSession $userSession): void
+	{
 		$user = $userSession->getUser();
 		if ($user !== null) {
 			$userId = $user->getUID();

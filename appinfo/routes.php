@@ -1,12 +1,14 @@
 <?php
 /**
- * Nextcloud - Forgejo
+ * @copyright hugo.duret@cea.fr 2024
  *
- * This file is licensed under the Affero General Public License version 3 or
- * later. See the COPYING file.
+ * Use of this source code is governed by an MIT-style
+ * license that can be found in the LICENSE file or at
+ * https://opensource.org/licenses/MIT.
+ *  
+ * Contributors:
+ *  @author Hugo Duret  hugo.duret@cea.fr - Initial implementation
  *
- * @author Hugo Duret <hugoduret@hotmail.fr>
- * @copyright Hugo Duret 2023
  */
 
 return [

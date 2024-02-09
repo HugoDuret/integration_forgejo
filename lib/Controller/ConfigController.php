@@ -1,12 +1,14 @@
 <?php
 /**
- * Nextcloud - forgejo
+ * @copyright hugo.duret@cea.fr 2024
  *
- * This file is licensed under the Affero General Public License version 3 or
- * later. See the COPYING file.
+ * Use of this source code is governed by an MIT-style
+ * license that can be found in the LICENSE file or at
+ * https://opensource.org/licenses/MIT.
+ *  
+ * Contributors:
+ *  @author Hugo Duret  hugo.duret@cea.fr - Initial implementation
  *
- * @author Hugo Duret <hugoduret@hotmail.fr>
- * @copyright Hugo Duret 2023
  */
 
 namespace OCA\Forgejo\Controller;
@@ -28,17 +30,20 @@ use OCA\Forgejo\Service\ForgejoAPIService;
 use OCA\Forgejo\AppInfo\Application;
 use OCP\PreConditionNotMetException;
 
-class ConfigController extends Controller {
+class ConfigController extends Controller
+{
 
-	public function __construct(string $appName,
-								IRequest $request,
-								private IConfig $config,
-								private IURLGenerator $urlGenerator,
-								private IL10N $l,
-								private IInitialState $initialStateService,
-								private ForgejoAPIService $forgejoAPIService,
-								private ForgejoReferenceProvider $forgejoReferenceProvider,
-								private ?string $userId) {
+	public function __construct(
+		string $appName,
+		IRequest $request,
+		private IConfig $config,
+		private IURLGenerator $urlGenerator,
+		private IL10N $l,
+		private IInitialState $initialStateService,
+		private ForgejoAPIService $forgejoAPIService,
+		private ForgejoReferenceProvider $forgejoReferenceProvider,
+		private ?string $userId
+	) {
 		parent::__construct($appName, $request);
 	}
 
@@ -50,7 +55,8 @@ class ConfigController extends Controller {
 	 * @return DataResponse
 	 * @throws PreConditionNotMetException
 	 */
-	public function setConfig(array $values): DataResponse {
+	public function setConfig(array $values): DataResponse
+	{
 		// revoke the oauth token if needed
 		if (isset($values['token']) && $values['token'] === '') {
 			$tokenType = $this->config->getUserValue($this->userId, Application::APP_ID, 'token_type');
@@ -99,7 +105,8 @@ class ConfigController extends Controller {
 	 * @param array $values
 	 * @return DataResponse
 	 */
-	public function setAdminConfig(array $values): DataResponse {
+	public function setAdminConfig(array $values): DataResponse
+	{
 		foreach ($values as $key => $value) {
 			$this->config->setAppValue(Application::APP_ID, $key, $value);
 		}
@@ -114,7 +121,8 @@ class ConfigController extends Controller {
 	 * @param string $user_displayname
 	 * @return TemplateResponse
 	 */
-	public function popupSuccessPage(string $user_name, string $user_displayname): TemplateResponse {
+	public function popupSuccessPage(string $user_name, string $user_displayname): TemplateResponse
+	{
 		$this->initialStateService->provideInitialState('popup-data', ['user_name' => $user_name, 'user_displayname' => $user_displayname]);
 		return new TemplateResponse(Application::APP_ID, 'popupSuccess', [], TemplateResponse::RENDER_AS_GUEST);
 	}
@@ -129,7 +137,8 @@ class ConfigController extends Controller {
 	 * @return RedirectResponse
 	 * @throws PreConditionNotMetException
 	 */
-	public function oauthRedirect(string $code = '', string $state = ''): RedirectResponse {
+	public function oauthRedirect(string $code = '', string $state = ''): RedirectResponse
+	{
 		$configState = $this->config->getUserValue($this->userId, Application::APP_ID, 'oauth_state');
 		$clientID = $this->config->getAppValue(Application::APP_ID, 'client_id');
 		$clientSecret = $this->config->getAppValue(Application::APP_ID, 'client_secret');
@@ -203,7 +212,8 @@ class ConfigController extends Controller {
 	 * @return array
 	 * @throws PreConditionNotMetException
 	 */
-	private function storeUserInfo(): array {
+	private function storeUserInfo(): array
+	{
 		$info = $this->forgejoAPIService->request($this->userId, 'user');
 		if (isset($info['username']) && isset($info['id'])) {
 			$this->config->setUserValue($this->userId, Application::APP_ID, 'user_id', $info['id']);

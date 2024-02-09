@@ -1,23 +1,14 @@
 <?php
 /**
- * @copyright Copyright (c) 2022 Hugo Duret <hugoduret@hotmail.fr>
+ * @copyright hugo.duret@cea.fr 2024
  *
- * @author Hugo Duret <hugoduret@hotmail.fr>
+ * Use of this source code is governed by an MIT-style
+ * license that can be found in the LICENSE file or at
+ * https://opensource.org/licenses/MIT.
+ *  
+ * Contributors:
+ *  @author Hugo Duret  hugo.duret@cea.fr - Initial implementation
  *
- * @license GNU AGPL version 3 or any later version
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as
- * published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 namespace OCA\Forgejo\Reference;
@@ -37,41 +28,48 @@ use OCP\IURLGenerator;
 use OCP\PreConditionNotMetException;
 use Throwable;
 
-class ForgejoReferenceProvider extends ADiscoverableReferenceProvider implements ISearchableReferenceProvider {
+class ForgejoReferenceProvider extends ADiscoverableReferenceProvider implements ISearchableReferenceProvider
+{
 
-	public function __construct(private ForgejoAPIService $forgejoAPIService,
-								private IConfig $config,
-								private ReferenceManager $referenceManager,
-								private IURLGenerator $urlGenerator,
-								private IL10N $l10n,
-								private ?string $userId) {
+	public function __construct(
+		private ForgejoAPIService $forgejoAPIService,
+		private IConfig $config,
+		private ReferenceManager $referenceManager,
+		private IURLGenerator $urlGenerator,
+		private IL10N $l10n,
+		private ?string $userId
+	) {
 	}
 
 	/**
 	 * @inheritDoc
 	 */
-	public function getId(): string	{
+	public function getId(): string
+	{
 		return 'forgejo-issue-mr';
 	}
 
 	/**
 	 * @inheritDoc
 	 */
-	public function getTitle(): string {
+	public function getTitle(): string
+	{
 		return $this->l10n->t('Forgejo repositories, issues and merge requests');
 	}
 
 	/**
 	 * @inheritDoc
 	 */
-	public function getOrder(): int	{
+	public function getOrder(): int
+	{
 		return 10;
 	}
 
 	/**
 	 * @inheritDoc
 	 */
-	public function getIconUrl(): string {
+	public function getIconUrl(): string
+	{
 		return $this->urlGenerator->getAbsoluteURL(
 			$this->urlGenerator->imagePath(Application::APP_ID, 'app-dark.svg')
 		);
@@ -80,14 +78,16 @@ class ForgejoReferenceProvider extends ADiscoverableReferenceProvider implements
 	/**
 	 * @inheritDoc
 	 */
-	public function getSupportedSearchProviderIds(): array {
+	public function getSupportedSearchProviderIds(): array
+	{
 		return ['forgejo-search-issues', 'forgejo-search-repos', 'forgejo-search-mrs'];
 	}
 
 	/**
 	 * @return array
 	 */
-	private function getForgejoUrls(): array {
+	private function getForgejoUrls(): array
+	{
 		//if ($this->userId === null) {
 		//	return ['https://forgejo.com'];
 		//}
@@ -106,7 +106,8 @@ class ForgejoReferenceProvider extends ADiscoverableReferenceProvider implements
 	 * @param $referenceText
 	 * @return string|null
 	 */
-	private function getMatchingForgejoUrl($referenceText): ?string {
+	private function getMatchingForgejoUrl($referenceText): ?string
+	{
 		// example links
 		// https://forgejo.com/owner/repo/-/issues/16
 		// https://forgejo.com/owner/repo/-/issues/16#note_1049227787
@@ -124,7 +125,8 @@ class ForgejoReferenceProvider extends ADiscoverableReferenceProvider implements
 	/**
 	 * @inheritDoc
 	 */
-	public function matchReference(string $referenceText): bool {
+	public function matchReference(string $referenceText): bool
+	{
 		if ($this->userId !== null) {
 			$linkPreviewEnabled = $this->config->getUserValue($this->userId, Application::APP_ID, 'link_preview_enabled', '1') === '1';
 			if (!$linkPreviewEnabled) {
@@ -142,7 +144,8 @@ class ForgejoReferenceProvider extends ADiscoverableReferenceProvider implements
 	/**
 	 * @inheritDoc
 	 */
-	public function resolveReference(string $referenceText): ?IReference {
+	public function resolveReference(string $referenceText): ?IReference
+	{
 		$forgejoUrl = $this->getMatchingForgejoUrl($referenceText);
 		if ($forgejoUrl !== null) {
 			$issuePath = $this->getIssuePath($forgejoUrl, $referenceText);
@@ -211,7 +214,8 @@ class ForgejoReferenceProvider extends ADiscoverableReferenceProvider implements
 	 * @param array $commentInfo
 	 * @return array
 	 */
-	private function getGenericCommentInfo(array $commentInfo): array {
+	private function getGenericCommentInfo(array $commentInfo): array
+	{
 		$info = [
 			'body' => $commentInfo['body'] ?? '',
 		];
@@ -241,7 +245,8 @@ class ForgejoReferenceProvider extends ADiscoverableReferenceProvider implements
 	 * @param array $projectLabels
 	 * @return array
 	 */
-	private function getGenericIssueInfo(array $issueInfo, array $projectLabels): array {
+	private function getGenericIssueInfo(array $issueInfo, array $projectLabels): array
+	{
 		$info = [
 			'id' => $issueInfo['iid'] ?? null,
 			'url' => $issueInfo['web_url'] ?? null,
@@ -255,7 +260,7 @@ class ForgejoReferenceProvider extends ADiscoverableReferenceProvider implements
 			foreach ($projectLabels as $label) {
 				$labelsByName[$label['name']] = $label;
 			}
-			$info['labels'] = array_map(static function(string $label) use ($labelsByName) {
+			$info['labels'] = array_map(static function (string $label) use ($labelsByName) {
 				return [
 					'name' => $label,
 					'color' => $labelsByName[$label]['text_color'],
@@ -281,7 +286,8 @@ class ForgejoReferenceProvider extends ADiscoverableReferenceProvider implements
 	 * @param array $projectLabels
 	 * @return array
 	 */
-	private function getGenericPrInfo(array $prInfo, array $projectLabels): array {
+	private function getGenericPrInfo(array $prInfo, array $projectLabels): array
+	{
 		$info = [
 			'id' => $prInfo['iid'] ?? null,
 			'url' => $prInfo['web_url'] ?? null,
@@ -295,7 +301,7 @@ class ForgejoReferenceProvider extends ADiscoverableReferenceProvider implements
 			foreach ($projectLabels as $label) {
 				$labelsByName[$label['name']] = $label;
 			}
-			$info['labels'] = array_map(static function(string $label) use ($labelsByName) {
+			$info['labels'] = array_map(static function (string $label) use ($labelsByName) {
 				return [
 					'name' => $label,
 					'color' => $labelsByName[$label]['text_color'],
@@ -321,7 +327,8 @@ class ForgejoReferenceProvider extends ADiscoverableReferenceProvider implements
 	 * @param string $url
 	 * @return array|null
 	 */
-	private function getIssuePath(string $forgejoUrl, string $url): ?array {
+	private function getIssuePath(string $forgejoUrl, string $url): ?array
+	{
 		preg_match('/^' . preg_quote($forgejoUrl, '/') . '\/([^\/\?]+)\/([^\/\?]+)\/-\/issues\/([0-9]+)(.*$)/', $url, $matches);
 		return count($matches) > 3 ? [$matches[1], $matches[2], $matches[3], $matches[4]] : null;
 	}
@@ -331,8 +338,9 @@ class ForgejoReferenceProvider extends ADiscoverableReferenceProvider implements
 	 * @param string $url
 	 * @return array|null
 	 */
-	private function getPrPath(string $forgejoUrl, string $url): ?array {
-		preg_match('/^'. preg_quote($forgejoUrl, '/') . '\/([^\/\?]+)\/([^\/\?]+)\/-\/merge_requests\/([0-9]+)(.*$)/', $url, $matches);
+	private function getPrPath(string $forgejoUrl, string $url): ?array
+	{
+		preg_match('/^' . preg_quote($forgejoUrl, '/') . '\/([^\/\?]+)\/([^\/\?]+)\/-\/merge_requests\/([0-9]+)(.*$)/', $url, $matches);
 		return count($matches) > 3 ? [$matches[1], $matches[2], $matches[3], $matches[4]] : null;
 	}
 
@@ -340,7 +348,8 @@ class ForgejoReferenceProvider extends ADiscoverableReferenceProvider implements
 	 * @param string $urlEnd
 	 * @return int|null
 	 */
-	private function getCommentId(string $urlEnd): ?int {
+	private function getCommentId(string $urlEnd): ?int
+	{
 		preg_match('/^#note_([0-9]+)$/', $urlEnd, $matches);
 		return (is_array($matches) && count($matches) > 1) ? ((int) $matches[1]) : null;
 	}
@@ -352,7 +361,8 @@ class ForgejoReferenceProvider extends ADiscoverableReferenceProvider implements
 	 * @return array|null
 	 * @throws PreConditionNotMetException
 	 */
-	private function getIssueCommentInfo(int $projectId, int $issueId, string $end): ?array {
+	private function getIssueCommentInfo(int $projectId, int $issueId, string $end): ?array
+	{
 		$commentId = $this->getCommentId($end);
 		return $commentId !== null ? $this->forgejoAPIService->getIssueCommentInfo($this->userId, $projectId, $issueId, $commentId) : null;
 	}
@@ -364,7 +374,8 @@ class ForgejoReferenceProvider extends ADiscoverableReferenceProvider implements
 	 * @return array|null
 	 * @throws PreConditionNotMetException
 	 */
-	private function getPrCommentInfo(int $projectId, int $prId, string $end): ?array {
+	private function getPrCommentInfo(int $projectId, int $prId, string $end): ?array
+	{
 		$commentId = $this->getCommentId($end);
 		return $commentId !== null ? $this->forgejoAPIService->getPrCommentInfo($this->userId, $projectId, $prId, $commentId) : null;
 	}
@@ -374,7 +385,8 @@ class ForgejoReferenceProvider extends ADiscoverableReferenceProvider implements
 	 * we want to invalidate all the user cache and this is only possible with the cache prefix
 	 * @inheritDoc
 	 */
-	public function getCachePrefix(string $referenceId): string {
+	public function getCachePrefix(string $referenceId): string
+	{
 		return $this->userId ?? '';
 	}
 
@@ -382,7 +394,8 @@ class ForgejoReferenceProvider extends ADiscoverableReferenceProvider implements
 	 * We don't use the userId here but rather a reference unique id
 	 * @inheritDoc
 	 */
-	public function getCacheKey(string $referenceId): ?string {
+	public function getCacheKey(string $referenceId): ?string
+	{
 		return $referenceId;
 	}
 
@@ -390,7 +403,8 @@ class ForgejoReferenceProvider extends ADiscoverableReferenceProvider implements
 	 * @param string $userId
 	 * @return void
 	 */
-	public function invalidateUserCache(string $userId): void {
+	public function invalidateUserCache(string $userId): void
+	{
 		$this->referenceManager->invalidateCache($userId);
 	}
 }

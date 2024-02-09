@@ -1,23 +1,13 @@
 <?php
 /**
- * @copyright Copyright (c) 2020 Hugo Duret <hugoduret@hotmail.fr>
+ * @copyright hugo.duret@cea.fr 2024
  *
- * @author Hugo Duret <hugoduret@hotmail.fr>
- *
- * @license GNU AGPL version 3 or any later version
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as
- * published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * Use of this source code is governed by an MIT-style
+ * license that can be found in the LICENSE file or at
+ * https://opensource.org/licenses/MIT.
+ *  
+ * Contributors:
+ *  @author Hugo Duret  hugo.duret@cea.fr - Initial implementation
  *
  */
 
@@ -32,54 +22,63 @@ use OCP\Util;
 
 use OCA\Forgejo\AppInfo\Application;
 
-class ForgejoWidget implements IWidget {
+class ForgejoWidget implements IWidget
+{
 
-	public function __construct(private IL10N $l10n,
-								private IConfig $config,
-								private IURLGenerator $url,
-								private IInitialState $initialStateService,
-								private ?string $userId) {
+	public function __construct(
+		private IL10N $l10n,
+		private IConfig $config,
+		private IURLGenerator $url,
+		private IInitialState $initialStateService,
+		private ?string $userId
+	) {
 	}
 
 	/**
 	 * @inheritDoc
 	 */
-	public function getId(): string {
+	public function getId(): string
+	{
 		return 'forgejo_todos';
 	}
 
 	/**
 	 * @inheritDoc
 	 */
-	public function getTitle(): string {
+	public function getTitle(): string
+	{
 		return $this->l10n->t('Forgejo To-Dos');
-		}
+	}
 
 	/**
 	 * @inheritDoc
 	 */
-	public function getOrder(): int {
+	public function getOrder(): int
+	{
 		return 10;
 	}
 
 	/**
 	 * @inheritDoc
 	 */
-	public function getIconClass(): string {
+	public function getIconClass(): string
+	{
 		return 'icon-forgejo';
 	}
 
 	/**
 	 * @inheritDoc
 	 */
-	public function getUrl(): ?string {
+	public function getUrl(): ?string
+	{
 		return $this->url->linkToRoute('settings.PersonalSettings.index', ['section' => 'connected-accounts']);
 	}
 
 	/**
 	 * @inheritDoc
 	 */
-	public function load(): void {
+	public function load(): void
+	{
 		$clientID = $this->config->getAppValue(Application::APP_ID, 'client_id');
 		$clientSecret = $this->config->getAppValue(Application::APP_ID, 'client_secret');
 		$adminOauthUrl = $this->config->getAppValue(Application::APP_ID, 'oauth_instance_url', Application::DEFAULT_FORGEJO_URL) ?: Application::DEFAULT_FORGEJO_URL;

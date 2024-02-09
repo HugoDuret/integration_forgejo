@@ -9,13 +9,13 @@
     <author>Hugo Duret</author>
     <namespace>Forgejo</namespace>
     <documentation>
-        <developer>https://github.com/HugoDuret/integration_forgejo</developer>
+        <developer>https://github.com/CEA-Hugo-Duret/nextcloud_integration_forgejo</developer>
     </documentation>
     <category>integration</category>
     <category>dashboard</category>
-    <website>https://github.com/HugoDuret/integration_forgejo</website>
-    <bugs>https://github.com/HugoDuret/integration_forgejo/issues</bugs>
-    <screenshot>https://github.com/HugoDuret/integration_forgejo/raw/main/img/screenshot1.jpg</screenshot>
+    <website>https://github.com/CEA-Hugo-Duret/nextcloud_integration_forgejo</website>
+    <bugs>https://github.com/CEA-Hugo-Duret/nextcloud_integration_forgejo/issues</bugs>
+    <screenshot>https://github.com/CEA-Hugo-Duret/nextcloud_integration_forgejo/raw/main/img/screenshot1.jpg</screenshot>
     <dependencies>
         <nextcloud min-version="26" max-version="28"/>
     </dependencies>

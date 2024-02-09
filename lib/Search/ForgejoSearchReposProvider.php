@@ -3,23 +3,14 @@
 declare(strict_types=1);
 
 /**
- * @copyright Copyright (c) 2020, Hugo Duret
+ * @copyright hugo.duret@cea.fr 2024
  *
- * @author Hugo Duret <hugoduret@hotmail.fr>
- *
- * @license AGPL-3.0
- *
- * This code is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License, version 3,
- * as published by the Free Software Foundation.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License, version 3,
- * along with this program. If not, see <http://www.gnu.org/licenses/>
+ * Use of this source code is governed by an MIT-style
+ * license that can be found in the LICENSE file or at
+ * https://opensource.org/licenses/MIT.
+ *  
+ * Contributors:
+ *  @author Hugo Duret  hugo.duret@cea.fr - Initial implementation
  *
  */
 namespace OCA\Forgejo\Search;
@@ -36,33 +27,39 @@ use OCP\Search\ISearchQuery;
 use OCP\Search\SearchResult;
 use OCP\Search\SearchResultEntry;
 
-class ForgejoSearchReposProvider implements IProvider {
+class ForgejoSearchReposProvider implements IProvider
+{
 
-	public function __construct(private IAppManager $appManager,
-								private IL10N $l10n,
-								private IConfig $config,
-								private IURLGenerator $urlGenerator,
-								private ForgejoAPIService $service) {
+	public function __construct(
+		private IAppManager $appManager,
+		private IL10N $l10n,
+		private IConfig $config,
+		private IURLGenerator $urlGenerator,
+		private ForgejoAPIService $service
+	) {
 	}
 
 	/**
 	 * @inheritDoc
 	 */
-	public function getId(): string {
+	public function getId(): string
+	{
 		return 'forgejo-search-repos';
 	}
 
 	/**
 	 * @inheritDoc
 	 */
-	public function getName(): string {
+	public function getName(): string
+	{
 		return $this->l10n->t('Forgejo repositories');
 	}
 
 	/**
 	 * @inheritDoc
 	 */
-	public function getOrder(string $route, array $routeParameters): int {
+	public function getOrder(string $route, array $routeParameters): int
+	{
 		if (strpos($route, Application::APP_ID . '.') === 0) {
 			// Active app, prefer Forgejo results
 			return -1;
@@ -74,7 +71,8 @@ class ForgejoSearchReposProvider implements IProvider {
 	/**
 	 * @inheritDoc
 	 */
-	public function search(IUser $user, ISearchQuery $query): SearchResult {
+	public function search(IUser $user, ISearchQuery $query): SearchResult
+	{
 		if (!$this->appManager->isEnabledForUser(Application::APP_ID, $user)) {
 			return SearchResult::complete($this->getName(), []);
 		}
@@ -127,7 +125,8 @@ class ForgejoSearchReposProvider implements IProvider {
 	 * @param array $entry
 	 * @return string
 	 */
-	protected function getMainText(array $entry): string {
+	protected function getMainText(array $entry): string
+	{
 		return $entry['path_with_namespace'] . ' [' . ($entry['star_count'] ?? 0) . '⭐]';
 	}
 
@@ -135,7 +134,8 @@ class ForgejoSearchReposProvider implements IProvider {
 	 * @param array $entry
 	 * @return string
 	 */
-	protected function getSubline(array $entry): string {
+	protected function getSubline(array $entry): string
+	{
 		return $entry['description'] ?? '';
 	}
 
@@ -143,7 +143,8 @@ class ForgejoSearchReposProvider implements IProvider {
 	 * @param array $entry
 	 * @return string
 	 */
-	protected function getLinkToForgejo(array $entry): string {
+	protected function getLinkToForgejo(array $entry): string
+	{
 		return $entry['web_url'] ?? '';
 	}
 
@@ -151,7 +152,8 @@ class ForgejoSearchReposProvider implements IProvider {
 	 * @param array $entry
 	 * @return string
 	 */
-	protected function getThumbnailUrl(array $entry): string {
+	protected function getThumbnailUrl(array $entry): string
+	{
 		$projectId = $entry['id'] ?? '';
 		$avatarUrl = $entry['avatar_url'] ?? '';
 		return $avatarUrl
