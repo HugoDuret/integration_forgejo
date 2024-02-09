@@ -13,7 +13,7 @@ OC.L10N.register(
     "OAuth access token refused" : "Žeton OAuth za dostop je bil zavrnjen",
     "Connected accounts" : "Povezani računi",
     "Forgejo integration" : "Združevalnik Forgejo",
-    "Integration of Forgejo software development management service" : "Združevalnik za dostop do storitev upravljanja razvijalskega okolja GItLab",
+    "Integration of Forgejo software development management service" : "Združevalnik za dostop do storitev upravljanja razvijalskega okolja Forgejo",
     "Forgejo integration provides a dashboard widget displaying your most important notifications\n    and a unified search provider for repositories, issues and merge requests." : "Podpora za Forgejo omogoča uporabo gradnika nadzorne plošče za prikazovanje pomembnih obvestil in sporočil in\nuporabo iskalnika po skladiščih, med napakami in različnimi objavami.",
     "If you want to allow your Nextcloud users to use OAuth to authenticate to a Forgejo instance of your choice, create an application in your Forgejo settings and set the ID and secret here." : "Za overitev okolja Github znotraj Nextcloud je treba uporabiti možnost OAuth. Med nastavitvami GitHub nastavite določilo ID in skrivno geslo.",
     "Make sure you set the \"Redirect URI\" to:" : "Poskrbite, da bo »preusmeritveni naslov URI« nastavljen na:",
